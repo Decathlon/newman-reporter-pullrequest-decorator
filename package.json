@@ -1,9 +1,8 @@
 {
-  "name": "@decathlon/newman-reporter-pullrequest-decorator",
-  "author": "Réda Benhaddou",
+  "name": "newman-reporter-pullrequest-decorator",
   "license": "Apache-2.0",
   "version": "0.0.2",
-  "description": "Newman reporter allowing to decorate Github's PullRequest with collection results",
+  "description": "Newman reporter allowing to decorate Github's PullRequest with postman collection results",
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec",

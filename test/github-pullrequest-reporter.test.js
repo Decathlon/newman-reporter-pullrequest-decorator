@@ -1,6 +1,6 @@
 'use strict';
 
-const GithubPullRequestReporter = require('../lib/github-pullrequest-reporter.js'),
+const PullRequestDecoratorReporter = require('../lib/pullrequest-decorator-reporter'),
   sinon = require("sinon"),
   chai = require('chai'),
   { assert, expect } = chai,
@@ -10,7 +10,7 @@ const GithubPullRequestReporter = require('../lib/github-pullrequest-reporter.js
 chai.use(sinonChai);
 
 
-describe("GithubPullRequestReporter in report mode", function () {
+describe("PullRequestDecoratorReporter in report mode", function () {
 
   const reporterOptions = { export: 'anyPath' }
   const newmanOptions = {
@@ -24,10 +24,10 @@ describe("GithubPullRequestReporter in report mode", function () {
   };
 
 
-  it("Given valid reporter options when instantiating GithubPullRequestReporter then it's context is correctly initialized", function () {
+  it("Given valid reporter options when instantiating PullRequestDecoratorReporter then it's context is correctly initialized", function () {
     // GIVEN valid reporter options 
     // WHEN
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
 
     // THEN
     expect(newmanEmitter.on).to.have.callCount(6);
@@ -38,17 +38,17 @@ describe("GithubPullRequestReporter in report mode", function () {
     expect(newmanEmitter.on).to.have.been.calledWith("beforeDone");
     expect(newmanEmitter.on).to.have.been.calledWith("done");
 
-    expect(gitHubPullRequestReporter.newmanEmitter).to.not.be.null;
+    expect(pullRequestDecoratorReporter.newmanEmitter).to.not.be.null;
 
-    assert.equal(gitHubPullRequestReporter.options.export, "anyPath", "export should equal `anyPath`");
-    assert.equal(gitHubPullRequestReporter.options.collectionName, "ANY_COLLECTION", "export should equal `ANY_COLLECTION`");
+    assert.equal(pullRequestDecoratorReporter.options.export, "anyPath", "export should equal `anyPath`");
+    assert.equal(pullRequestDecoratorReporter.options.collectionName, "ANY_COLLECTION", "export should equal `ANY_COLLECTION`");
 
-    expect(gitHubPullRequestReporter.context.currentItem).to.not.be.null;
-    expect(gitHubPullRequestReporter.context.assertions.failed_count).to.equal(0);
-    expect(gitHubPullRequestReporter.context.assertions.skipped_count).to.equal(0);
-    expect(gitHubPullRequestReporter.context.currentItem.failed).to.be.empty;
-    expect(gitHubPullRequestReporter.context.currentItem.skipped).to.be.empty;
-    expect(gitHubPullRequestReporter.context.list).to.be.empty;
+    expect(pullRequestDecoratorReporter.context.currentItem).to.not.be.null;
+    expect(pullRequestDecoratorReporter.context.assertions.failed_count).to.equal(0);
+    expect(pullRequestDecoratorReporter.context.assertions.skipped_count).to.equal(0);
+    expect(pullRequestDecoratorReporter.context.currentItem.failed).to.be.empty;
+    expect(pullRequestDecoratorReporter.context.currentItem.skipped).to.be.empty;
+    expect(pullRequestDecoratorReporter.context.list).to.be.empty;
 
   });
 
@@ -57,14 +57,14 @@ describe("GithubPullRequestReporter in report mode", function () {
     // GIVEN
 
     // WHEN
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
 
-    const reportWithoutStart = Object.assign({}, gitHubPullRequestReporter);
+    const reportWithoutStart = Object.assign({}, pullRequestDecoratorReporter);
 
-    gitHubPullRequestReporter.start();
+    pullRequestDecoratorReporter.start();
 
     // THEN
-    expect(gitHubPullRequestReporter).to.deep.equal(reportWithoutStart);
+    expect(pullRequestDecoratorReporter).to.deep.equal(reportWithoutStart);
   });
 
   it("Given an initialized reporter when calling *beforeItem* event method then context is not changed", function () {
@@ -79,14 +79,14 @@ describe("GithubPullRequestReporter in report mode", function () {
     }
 
     // WHEN
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
 
-    const reportWithoutBeforeItem = Object.assign({}, gitHubPullRequestReporter);
+    const reportWithoutBeforeItem = Object.assign({}, pullRequestDecoratorReporter);
 
-    gitHubPullRequestReporter.beforeItem(null, args);
+    pullRequestDecoratorReporter.beforeItem(null, args);
 
     // THEN
-    expect(gitHubPullRequestReporter).to.deep.equal(reportWithoutBeforeItem);
+    expect(pullRequestDecoratorReporter).to.deep.equal(reportWithoutBeforeItem);
   });
 
 
@@ -123,19 +123,19 @@ describe("GithubPullRequestReporter in report mode", function () {
     }
 
     // WHEN
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
-    gitHubPullRequestReporter.request(null, args);
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.request(null, args);
 
     // THEN
-    expect(gitHubPullRequestReporter.context.currentItem.id).to.equal("a01cc61f-d9ed-4c3e-8d55-740adcb24e04");
-    expect(gitHubPullRequestReporter.context.currentItem.request_name).to.equal("As a Sport User, i can see sport details");
-    expect(gitHubPullRequestReporter.context.currentItem.url).to.not.be.null;
-    expect(gitHubPullRequestReporter.context.currentItem.method).to.equal("GET");
-    expect(gitHubPullRequestReporter.context.currentItem.status).to.equal("OK");
-    expect(gitHubPullRequestReporter.context.currentItem.body).to.not.be.null;
-    expect(gitHubPullRequestReporter.context.currentItem.code).to.equal(200);
-    expect(gitHubPullRequestReporter.context.currentItem.test_status).to.equal("PASS");
-    expect(gitHubPullRequestReporter.context.list).to.have.lengthOf(1);
+    expect(pullRequestDecoratorReporter.context.currentItem.id).to.equal("a01cc61f-d9ed-4c3e-8d55-740adcb24e04");
+    expect(pullRequestDecoratorReporter.context.currentItem.request_name).to.equal("As a Sport User, i can see sport details");
+    expect(pullRequestDecoratorReporter.context.currentItem.url).to.not.be.null;
+    expect(pullRequestDecoratorReporter.context.currentItem.method).to.equal("GET");
+    expect(pullRequestDecoratorReporter.context.currentItem.status).to.equal("OK");
+    expect(pullRequestDecoratorReporter.context.currentItem.body).to.not.be.null;
+    expect(pullRequestDecoratorReporter.context.currentItem.code).to.equal(200);
+    expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("PASS");
+    expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(1);
 
   });
 
@@ -168,13 +168,13 @@ describe("GithubPullRequestReporter in report mode", function () {
     }
 
     // WHEN
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
-    gitHubPullRequestReporter.request(error, args);
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.request(error, args);
 
     // THEN
-    expect(gitHubPullRequestReporter.context.currentItem.body).to.equal("TECHNICAL_ERROR");
-    expect(gitHubPullRequestReporter.context.currentItem.test_status).to.equal("FAIL");
-    expect(gitHubPullRequestReporter.context.list).to.have.lengthOf(1);
+    expect(pullRequestDecoratorReporter.context.currentItem.body).to.equal("TECHNICAL_ERROR");
+    expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("FAIL");
+    expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(1);
 
   });
 
@@ -189,14 +189,14 @@ describe("GithubPullRequestReporter in report mode", function () {
     }
 
     // WHEN
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
-    gitHubPullRequestReporter.assertion(error);
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.assertion(error);
 
     // THEN
 
-    expect(gitHubPullRequestReporter.context.currentItem.test_status).to.equal("FAIL");
-    expect(gitHubPullRequestReporter.context.currentItem.failed[0]).to.equal('Status code is 200 , AssertionError , expected response to have status code 200 but got 404');
-    expect(gitHubPullRequestReporter.context.assertions.failed_count).to.equal(1);
+    expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("FAIL");
+    expect(pullRequestDecoratorReporter.context.currentItem.failed[0]).to.equal('Status code is 200 , AssertionError , expected response to have status code 200 but got 404');
+    expect(pullRequestDecoratorReporter.context.assertions.failed_count).to.equal(1);
 
   });
 
@@ -210,12 +210,12 @@ describe("GithubPullRequestReporter in report mode", function () {
     }
 
     // WHEN
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
-    gitHubPullRequestReporter.assertion(null, args);
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.assertion(null, args);
 
     // THEN
-    expect(gitHubPullRequestReporter.context.currentItem.test_status).to.equal("SKIP");
-    expect(gitHubPullRequestReporter.context.assertions.skipped_count).to.equal(1);
+    expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("SKIP");
+    expect(pullRequestDecoratorReporter.context.assertions.skipped_count).to.equal(1);
 
   });
 
@@ -273,8 +273,8 @@ describe("GithubPullRequestReporter in report mode", function () {
     }
 
     // AND for each item : its details generated by the reporter
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
-    gitHubPullRequestReporter.context.list = [
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.context.list = [
       {
         "failed": [],
         "skipped": [],
@@ -325,11 +325,11 @@ describe("GithubPullRequestReporter in report mode", function () {
 
 
     // WHEN
-    gitHubPullRequestReporter.beforeDone(null, args);
+    pullRequestDecoratorReporter.beforeDone(null, args);
 
     // THEN
     expect(spyPush).to.have.been.calledWith({
-      name: 'github-pullrequest-reporter',
+      name: 'pullrequest-decorator-reporter',
       default: 'newman-run-report.md',
       path: 'anyPath',
       content: 'any markdown'
@@ -398,7 +398,7 @@ describe("GithubPullRequestReporter in report mode", function () {
   });
 });
 
-describe("GithubPullRequestReporter in non report mode (github mode)", function () {
+describe("PullRequestDecoratorReporter in non report mode (github mode)", function () {
 
   const newmanOptions = {
     collection: {
@@ -410,38 +410,38 @@ describe("GithubPullRequestReporter in non report mode (github mode)", function 
     on: sinon.spy()
   };
 
-  it("Given valid reporter options when instantiating GithubPullRequestReporter then throw an exception", function () {
+  it("Given valid reporter options when instantiating PullRequestDecoratorReporter then throw an exception", function () {
     const reporterOptions = {
-      githubPullrequestRepo: "org/repo",
-      githubPullrequestRefcommit: "12525141526950",
-      githubPullrequestToken: "gUoowOFHOSFjn142414"
+      pullrequestDecoratorRepo: "org/repo",
+      pullrequestDecoratorRefcommit: "12525141526950",
+      pullrequestDecoratorToken: "gUoowOFHOSFjn142414"
     }
 
-    const gitHubPullRequestReporter = new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions);
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
 
-    assert.equal(gitHubPullRequestReporter.options.repo, 'org/repo');
-    assert.equal(gitHubPullRequestReporter.options.refCommit, '12525141526950');
-    assert.equal(gitHubPullRequestReporter.options.token, 'gUoowOFHOSFjn142414');
+    assert.equal(pullRequestDecoratorReporter.options.repo, 'org/repo');
+    assert.equal(pullRequestDecoratorReporter.options.refCommit, '12525141526950');
+    assert.equal(pullRequestDecoratorReporter.options.token, 'gUoowOFHOSFjn142414');
 
   });
 
-  it("Given repository name missing when instantiating GithubPullRequestReporter hen it's options are correctly initialized", function () {
-    expect(() => new GithubPullRequestReporter(newmanEmitter, {}, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Repository name is missing ! Add --reporter-github-pullrequest-repo <repo>.');
+  it("Given repository name missing when instantiating PullRequestDecoratorReporter hen it's options are correctly initialized", function () {
+    expect(() => new PullRequestDecoratorReporter(newmanEmitter, {}, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Repository name is missing ! Add --reporter-pullrequest-decorator-repo <repo>.');
   });
 
-  it("Given ref commit missing when instantiating GithubPullRequestReporter then throw an exception", function () {
+  it("Given ref commit missing when instantiating PullRequestDecoratorReporter then throw an exception", function () {
     const reporterOptions = {
-      githubPullrequestRepo: "org/repo"
+      pullrequestDecoratorRepo: "org/repo"
     }
-    expect(() => new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Ref commit is missing ! Add --reporter-github-pullrequest-refcommit <refcommit>.');
+    expect(() => new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Ref commit is missing ! Add --reporter-pullrequest-decorator-refcommit <refcommit>.');
   });
 
-  it("Given token missing when instantiating GithubPullRequestReporter then throw an exception", function () {
+  it("Given token missing when instantiating PullRequestDecoratorReporter then throw an exception", function () {
     const reporterOptions = {
-      githubPullrequestRepo: "org/repo",
-      githubPullrequestRefcommit: "12525141526950",
+      pullrequestDecoratorRepo: "org/repo",
+      pullrequestDecoratorRefcommit: "12525141526950",
     }
-    expect(() => new GithubPullRequestReporter(newmanEmitter, reporterOptions, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Token is missing ! Add --reporter-github-pullrequest-token <token>.');
+    expect(() => new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Token is missing ! Add --reporter-pullrequest-decorator-token <token>.');
   });
 
 });
