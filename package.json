@@ -1,0 +1,62 @@
+{
+  "name": "@decathlon/newman-reporter-pullrequest-decorator",
+  "author": "Réda Benhaddou",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "description": "Newman reporter allowing to decorate Github's PullRequest with collection results",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "coverage": "nyc --reporter=lcov npm run test",
+    "release": "npx standard-version"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
+  },
+  "keywords": [
+    "newman",
+    "github",
+    "pull request",
+    "reporter",
+    "postman",
+    "api",
+    "api testing",
+    "testing",
+    "test"
+  ],
+  "homepage": "https://github.com/Decathlon/newman-reporter-pullrequest-decorator",
+  "bugs": {
+    "url": "https://github.com/Decathlon/newman-reporter-pullrequest-decorator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Decathlon/newman-reporter-pullrequest-decorator.git"
+  },
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "dependencies": {
+    "@octokit/rest": "^18.5.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "chai": "^4.3.4",
+    "chai-fs": "^2.0.0",
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0",
+    "sinon": "^11.1.1",
+    "sinon-chai": "^3.7.0",
+    "standard-version": "^9.3.0"
+  }
+}
