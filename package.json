@@ -7,14 +7,22 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
+    "lint": "eslint ./lib",
+    "lint:fix": "eslint ./lib --fix",
     "coverage": "nyc --reporter=lcov npm run test",
     "release": "npx standard-version"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix"
   },
+  "files": [
+    "lib/",
+    "index.js",
+    "README.md",
+    "code-of-conduct.md",
+    "contributing.md",
+    "contributor-licence-agreement.md"
+  ],
   "keywords": [
     "newman",
     "github",
@@ -33,6 +41,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Decathlon/newman-reporter-pullrequest-decorator.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "licenses": [
     {

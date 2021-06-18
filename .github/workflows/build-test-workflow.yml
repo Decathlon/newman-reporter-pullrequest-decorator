@@ -38,11 +38,6 @@ jobs:
       steps:
         # Retrieves repo content
         - uses: actions/checkout@v2
-          with:
-            fetch-depth: 0
-            ssh-key: ${{ secrets.DEPLOY_KEY }}
-            ssh-strict: false
-
 
         # Uses node v12
         - name: Use Node.js v12

@@ -1,11 +1,11 @@
 'use strict';
 
-const GithubPullRequestReporter = require('../src/github-pullrequest-reporter.js'),
+const GithubPullRequestReporter = require('../lib/github-pullrequest-reporter.js'),
   sinon = require("sinon"),
   chai = require('chai'),
   { assert, expect } = chai,
   sinonChai = require("sinon-chai"),
-  utils = require('../src/utils');
+  utils = require('../lib/utils');
 
 chai.use(sinonChai);
 

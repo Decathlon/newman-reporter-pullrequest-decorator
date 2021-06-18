@@ -1,6 +1,6 @@
 'use strict';
 
-const GithubService = require('../src/github-service.js'),
+const GithubService = require('../lib/github-service.js'),
     sinon = require("sinon"),
     chai = require('chai'),
     { expect } = chai,

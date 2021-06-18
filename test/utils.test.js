@@ -1,4 +1,4 @@
-const { buildMarkdownText } = require("../src/utils.js")
+const { buildMarkdownText } = require("../lib/utils.js")
 chai = require('chai'),
 	{ assert, expect } = chai,
 	path = require('path'),

@@ -1,3 +1,3 @@
-const GithubPullRequestReporter = require('./src/github-pullrequest-reporter');
+const GithubPullRequestReporter = require('./lib/github-pullrequest-reporter');
 
 module.exports = GithubPullRequestReporter;
