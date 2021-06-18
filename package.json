@@ -2,7 +2,7 @@
   "name": "@decathlon/newman-reporter-pullrequest-decorator",
   "author": "Réda Benhaddou",
   "license": "Apache-2.0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Newman reporter allowing to decorate Github's PullRequest with collection results",
   "main": "index.js",
   "scripts": {
