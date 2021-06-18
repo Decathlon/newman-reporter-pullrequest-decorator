@@ -2,8 +2,7 @@
 
 [![NPM Version](https://img.shields.io/npm/v/newman-reporter-pullrequest-decorator.svg?style=flat-square)](https://www.npmjs.com/package/newman-reporter-pullrequest-decorator)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=newman-reporter-pullrequest-decorator&metric=alert_status)](https://sonarcloud.io/dashboard?id=newman-reporter-pullrequest-decorator)
-[![NPM Weekly Downloads](https://img.shields.io/npm/dw/newman-reporter-pullrequest-decorator.svg?style=flat-square)](https://www.npmjs.com/package/newman-reporter-pullrequest-decorator)
-[![NPM Downloads](https://img.shields.io/npm/dt/newman-reporter-pullrequest-decorator.svg?style=flat-square)](https://www.npmjs.com/package/newman-reporter-pullrequest-decorator)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dktunited_newman-reporter-github-pullrequest&metric=coverage&token=f25ebda872835bf65726cd70f77a84bb808dec9d)](https://sonarcloud.io/dashboard?id=dktunited_newman-reporter-github-pullrequest)
 
 ## Description
 
@@ -48,23 +47,22 @@ npm install -g newman-reporter-pullrequest-decorator
 
 ## Usage
 
-Specify `-r pullrequest-decorator` option while running the collection
+Specify `-r @decathlon/pullrequest-decorator` option while running the collection
 
 In non export mode (it means you actually want to update github pull request) :  
 
 ```bash
-newman run <collection-url> --environment=<env-url> -r pullrequest-decorator \
+newman run <collection-url> --environment=<env-url> -r @decathlon/pullrequest-decorator \
   --reporter-pullrequest-decorator-repo <repo> \
   --reporter-pullrequest-decorator-token <github-token> \
   --reporter-pullrequest-decorator-checkname <check-name> \
-  --reporter-pullrequest-decorator-refcommit <ref-commit> \
-  --suppress-exit-code
+  --reporter-pullrequest-decorator-refcommit <ref-commit>
 ```
 
 In export mode :  
 
 ```bash
-newman run <collection-url> --environment=<env-url> -r pullrequest-decorator \
+newman run <collection-url> --environment=<env-url> -r @decathlon/pullrequest-decorator \
   --reporter-export <export-path> 
 ```
 
@@ -77,7 +75,7 @@ newman run <collection-url> --environment=<env-url> -r pullrequest-decorator \
 `--reporter-pullrequest-decorator-checkname` | (Optional : Default `newman-check`) Name you want to give to the check name that will be created by the reporter. This parameter is useful if you want to wait for a specific check name to be completed inside your workflow. See, for example, the following github action : fountainhead/action-wait-for-check@v1.0.0
 `--reporter-pullrequest-decorator-refcommit` | (Required) Long Commit hash. When you run this reporter from a Pull Request. You should use : ${{ github.event.pull_request.head.sha }}
 `--reporter-debug` | (Optional : Default `false`) Reporter debug mode
-`--suppress-exit-code` | (Required) Ensure that asynchronous github API is called before reporter termination.
+`--suppress-exit-code` | (Optional) Ensure that asynchronous github API is called before reporter termination.
 
 ---
 
