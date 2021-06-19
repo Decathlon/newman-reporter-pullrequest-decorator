@@ -410,37 +410,230 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
     on: sinon.spy()
   };
 
-  it("Given valid reporter options when instantiating PullRequestDecoratorReporter then throw an exception", function () {
+  it("Given valid reporter options when instantiating PullRequestDecoratorReporter then it's options are correctly initialized", function () {
+    // GIVEN valid reporterOptions
     const reporterOptions = {
       pullrequestDecoratorRepo: "org/repo",
       pullrequestDecoratorRefcommit: "12525141526950",
       pullrequestDecoratorToken: "gUoowOFHOSFjn142414"
     }
 
+    // WHEN
     const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
 
+    // THEN
     assert.equal(pullRequestDecoratorReporter.options.repo, 'org/repo');
     assert.equal(pullRequestDecoratorReporter.options.refCommit, '12525141526950');
     assert.equal(pullRequestDecoratorReporter.options.token, 'gUoowOFHOSFjn142414');
 
   });
 
-  it("Given repository name missing when instantiating PullRequestDecoratorReporter hen it's options are correctly initialized", function () {
+  it("Given an item collection when calling *done* event method then githubService is called with correct information", function () {
+    // GIVEN valid reporterOptions
+    const reporterOptions = {
+      pullrequestDecoratorRepo: "org/repo",
+      pullrequestDecoratorRefcommit: "12525141526950",
+      pullrequestDecoratorToken: "gUoowOFHOSFjn142414"
+    }
+
+    // AND collection of items grouped by folder name
+    const args = {
+      collection: {
+        items: [
+          {
+            "id": "975b4315-4dbf-493f-9f1a-07dc9c86a9ba",
+            "name": "As a Sport User, i can find a sport place",
+            "items": [
+              {
+                "id": "aea24803-aff8-4183-a0d4-a359c0d8888a",
+                "name": "Get all ice hockey sport places within 99km around McGill University in Montréal, Canada"
+              },
+              {
+                "id": "8eb0fa88-f724-4e80-983d-5cba1a97be86",
+                "name": "Show one place"
+              }
+            ]
+          },
+          {
+            "id": "7609bc00-550f-4af1-8912-8d118ce0b9b8",
+            "name": "As a Sport User, i can see sport details",
+            "items": [
+              {
+                "id": "56fa0911-11f2-4533-9762-2870bed3aa2c",
+                "name": "List all sports with allowed filters & tags"
+              },
+              {
+                "id": "6a6efb2a-7e80-40e9-94be-bc5c01c4c4e1",
+                "name": "Show details for a sport"
+              }
+            ]
+          }
+        ]
+      }
+    }
+
+    // AND PullRequestDecoratorReporter with github check sucessfully created
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    sinon.stub(pullRequestDecoratorReporter.githubService, 'createPullRequestCheck').callsFake(() => Promise.resolve());
+
+
+    // AND successful collection results
+    pullRequestDecoratorReporter.context.assertions = {
+      failed_count: 0
+    }
+
+    // AND sucessfully generated context
+    pullRequestDecoratorReporter.context.list = [
+      {
+        "failed": [],
+        "skipped": [],
+        "id": "aea24803-aff8-4183-a0d4-a359c0d8888a",
+        "request_name": "Get all ice hockey sport places within 99km around McGill University in Montréal, Canada",
+        "url": "https://sportplaces.api.decathlon.com/api/v1/places?origin=-73.582,45.511&radius=99&sports=175",
+        "method": "GET",
+        "status": "OK",
+        "code": 200,
+        "test_status": "PASS"
+      },
+      {
+        "failed": [],
+        "skipped": [],
+        "id": "8eb0fa88-f724-4e80-983d-5cba1a97be86",
+        "request_name": "Show one place",
+        "url": "https://sportplaces.api.decathlon.com/api/v1/places/8b1e3027-e438-42c2-92ab-5ebd23f68d54",
+        "method": "GET",
+        "status": "OK",
+        "body": "",
+        "code": 200,
+        "test_status": "PASS"
+      },
+      {
+        "failed": [],
+        "skipped": [],
+        "id": "56fa0911-11f2-4533-9762-2870bed3aa2c",
+        "request_name": "List all sports with allowed filters & tags",
+        "url": "https://sportplaces-api.decathlon.com/api/v1/sports",
+        "method": "GET",
+        "status": "OK",
+        "code": 200,
+        "test_status": "PASS"
+      },
+      {
+        "failed": [],
+        "skipped": [],
+        "id": "6a6efb2a-7e80-40e9-94be-bc5c01c4c4e1",
+        "request_name": "Show details for a sport",
+        "url": "https://sportplaces-api.decathlon.com/api/v1/sports/12",
+        "method": "GET",
+        "status": "OK",
+        "body": "",
+        "code": 200,
+        "test_status": "PASS"
+      }
+    ]
+
+    // WHEN
+    pullRequestDecoratorReporter.done(null, args);
+
+    // THEN
+    expect(pullRequestDecoratorReporter.githubService.createPullRequestCheck).to.have.been.calledWith(
+      {
+        assertions: { failed_count: 0 },
+        items: [
+          {
+            "name": "As a Sport User, i can find a sport place",
+            "subItems": [
+              {
+                "failed": [],
+                "skipped": [],
+                "id": "aea24803-aff8-4183-a0d4-a359c0d8888a",
+                "request_name": "Get all ice hockey sport places within 99km around McGill University in Montréal, Canada",
+                "url": "https://sportplaces.api.decathlon.com/api/v1/places?origin=-73.582,45.511&radius=99&sports=175",
+                "method": "GET",
+                "status": "OK",
+                "code": 200,
+                "test_status": "PASS"
+              },
+              {
+                "failed": [],
+                "skipped": [],
+                "id": "8eb0fa88-f724-4e80-983d-5cba1a97be86",
+                "request_name": "Show one place",
+                "url": "https://sportplaces.api.decathlon.com/api/v1/places/8b1e3027-e438-42c2-92ab-5ebd23f68d54",
+                "method": "GET",
+                "status": "OK",
+                "body": "",
+                "code": 200,
+                "test_status": "PASS"
+              }
+            ]
+          },
+          {
+            "name": "As a Sport User, i can see sport details",
+            "subItems": [
+              {
+                "failed": [],
+                "skipped": [],
+                "id": "56fa0911-11f2-4533-9762-2870bed3aa2c",
+                "request_name": "List all sports with allowed filters & tags",
+                "url": "https://sportplaces-api.decathlon.com/api/v1/sports",
+                "method": "GET",
+                "status": "OK",
+                "code": 200,
+                "test_status": "PASS"
+              },
+              {
+                "failed": [],
+                "skipped": [],
+                "id": "6a6efb2a-7e80-40e9-94be-bc5c01c4c4e1",
+                "request_name": "Show details for a sport",
+                "url": "https://sportplaces-api.decathlon.com/api/v1/sports/12",
+                "method": "GET",
+                "status": "OK",
+                "body": "",
+                "code": 200,
+                "test_status": "PASS"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        repo: 'org/repo',
+        refCommit: '12525141526950',
+        checkName: undefined,
+        token: 'gUoowOFHOSFjn142414',
+        export: undefined,
+        collectionName: 'ANY_COLLECTION',
+        debug: undefined
+      });
+
+
+  });
+
+  it("Given repository name missing when instantiating PullRequestDecoratorReporter then throw an exception", function () {
+    // GIVEN missing repository name THEN WHEN
     expect(() => new PullRequestDecoratorReporter(newmanEmitter, {}, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Repository name is missing ! Add --reporter-pullrequest-decorator-repo <repo>.');
   });
 
   it("Given ref commit missing when instantiating PullRequestDecoratorReporter then throw an exception", function () {
+    // GIVEN missing refcommit
     const reporterOptions = {
       pullrequestDecoratorRepo: "org/repo"
     }
+
+    // THEN WHEN
     expect(() => new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Ref commit is missing ! Add --reporter-pullrequest-decorator-refcommit <refcommit>.');
   });
 
   it("Given token missing when instantiating PullRequestDecoratorReporter then throw an exception", function () {
+    // GIVEN missing token
     const reporterOptions = {
       pullrequestDecoratorRepo: "org/repo",
       pullrequestDecoratorRefcommit: "12525141526950",
     }
+
+    // THEN WHEN
     expect(() => new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Token is missing ! Add --reporter-pullrequest-decorator-token <token>.');
   });
 

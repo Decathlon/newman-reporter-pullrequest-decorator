@@ -169,4 +169,36 @@ describe("Markdown generation", function () {
 			}
 		]));
 	});
+
+	it("Given an invalid collections (mix of folder and flat requests) when calling buildMarkdownText then throw an error", function () {
+		expect(() => buildMarkdownText([
+			{
+				request_name: 'Get all ice hockey sport places within 99km around McGill University in Montréal, Canada',
+				url: 'https://sportplaces.api.decathlon.com/api/v1/places?origin=-73.582,45.511&radius=99&sports=175',
+				method: 'GET',
+				status: 'OK',
+				code: 200,
+				test_status: 'PASS',
+				failed: [],
+				skipped: []
+			},
+			{
+				"name": "As a Sport User, i can see sport details",
+				"subItems": [
+					{
+						"id": "b43d81ce-3386-4f35-90a2-773ef0e74f7e",
+						"request_name": "Show details for a sport",
+						"url": "https://sportplaces-api.decathlon.com/api/v1/sports/12",
+						"method": "GET",
+						"failed": [],
+						"skipped": [],
+						"status": "OK",
+						"code": 201,
+						"test_status": "PASS"
+					}
+				]
+			}
+		]))
+			.to.throw(Error, 'Collection should contain at any level either only folders or requests.');
+	});
 });
