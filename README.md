@@ -1,6 +1,8 @@
 # newman-reporter-pullrequest-decorator
 
+
 [![NPM Version](https://img.shields.io/npm/v/@decathlon/newman-reporter-pullrequest-decorator.svg?style=flat-square)](https://www.npmjs.com/package/@decathlon/newman-reporter-pullrequest-decorator)
+[![Build, test and publish](https://github.com/Decathlon/newman-reporter-pullrequest-decorator/actions/workflows/build-test-publish-workflow.yml/badge.svg?branch=main)](https://github.com/Decathlon/newman-reporter-pullrequest-decorator/actions/workflows/build-test-publish-workflow.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=newman-reporter-pullrequest-decorator&metric=alert_status)](https://sonarcloud.io/dashboard?id=newman-reporter-pullrequest-decorator)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=newman-reporter-pullrequest-decorator&metric=coverage)](https://sonarcloud.io/dashboard?id=newman-reporter-pullrequest-decorator)
 
