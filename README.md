@@ -21,7 +21,7 @@ PullRequest's Check example :
 ## Getting Started
 
 1. Install `newman`
-2. Install `newman-reporter-pullrequest-decorator`
+2. Install `@decathlon/newman-reporter-pullrequest-decorator`
 3. Run your github workflow and extract from it :
      * GITHUB TOKEN from your running job. Usually, you can get it from ${{ secrets.GITHUB_TOKEN }}.
 
@@ -38,7 +38,7 @@ PullRequest's Check example :
 ## Installation
 
 ```console
-npm install -g newman-reporter-pullrequest-decorator
+npm install -g @decathlon/newman-reporter-pullrequest-decorator
 ```
 
 > Installation should be done globally if newman is installed globally, otherwise install without `-g` option
@@ -90,6 +90,6 @@ To solve this issue, you can use a token from your own created Github App (and n
 ## Development
 
 - `npm pack`
-- `npm i -g newman-reporter-pullrequest-decorator.<version>.tgz`
+- `npm i -g decathlon-newman-reporter-pullrequest-decorator.<version>.tgz`
 
 ---
