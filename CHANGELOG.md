@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.6 (2021-06-19)
+
+
+### Bug Fixes
+
+* organization Scoped repository documentation ready ([0d32fe5](https://github.com/Decathlon/newman-reporter-pullrequest-decorator/commit/0d32fe5b953d181968f8d415a92cb3efe85057d8))
+
 ### 0.0.5 (2021-06-18)
 
 ### 0.0.4 (2021-06-18)
