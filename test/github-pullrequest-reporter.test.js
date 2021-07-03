@@ -139,9 +139,9 @@ describe("PullRequestDecoratorReporter in report mode", function () {
 
   });
 
-  it("Given an expected error on request when calling *request* event method then context is correctly filled with request information", function () {
+  it("Given an unexpected error on request when calling *request* event method then context is correctly filled with request information", function () {
 
-    // GIVEN an expected error
+    // GIVEN an unexpected error
 
     const error = {
       "code": "TECHNICAL_ERROR"
@@ -175,6 +175,53 @@ describe("PullRequestDecoratorReporter in report mode", function () {
     expect(pullRequestDecoratorReporter.context.currentItem.body).to.equal("TECHNICAL_ERROR");
     expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("FAIL");
     expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(1);
+
+  });
+
+  it("Given a neither valid error or successful request when calling *request* event method then throw an error", function () {
+
+    // GIVEN a invalid request : it does not contain a response
+
+
+    const args = {
+      "request": {
+        "url": {
+          "protocol": "https",
+          "path": ["api/v1/sports/12"],
+          "host": ["localhost"],
+          "query": [],
+          "variable": []
+        }
+      },
+      "item": {
+        "name": "As a Sport User, i can see sport details",
+      }
+    }
+
+    // THEN WHEN calling request event without any error
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    expect(() => pullRequestDecoratorReporter.request(null, args)).to.throw(Error, '[-] ERROR: Result of the request named [As a Sport User, i can see sport details] cannot be identified neither as an error nor a success.');
+  });
+
+  it("Given assertion in success when calling *assertion* event method then context is correctly filled with request information", function () {
+
+    // GIVEN a not skipped assertion
+    const args = {
+      "skipped": false
+    }
+
+    // AND a currentItem with a 'PASS' test status  WHEN calling assertion event 
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.context.currentItem.test_status = "PASS";
+    pullRequestDecoratorReporter.assertion(null, args);
+
+    // THEN
+
+    expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("PASS");
+    expect(pullRequestDecoratorReporter.context.assertions.failed_count).to.equal(0);
+    expect(pullRequestDecoratorReporter.context.assertions.skipped_count).to.equal(0);
+    expect(pullRequestDecoratorReporter.context.currentItem.failed).to.be.empty;
+    expect(pullRequestDecoratorReporter.context.currentItem.skipped).to.be.empty;
 
   });
 
@@ -215,7 +262,28 @@ describe("PullRequestDecoratorReporter in report mode", function () {
 
     // THEN
     expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("SKIP");
+    expect(pullRequestDecoratorReporter.context.currentItem.skipped[0]).to.equal('Status code is 200');
     expect(pullRequestDecoratorReporter.context.assertions.skipped_count).to.equal(1);
+
+  });
+
+  it("Given a skipped assertion but *request* event having failed before when calling *assertion* event method then context is correctly filled with request information", function () {
+
+    // GIVEN
+
+    const args = {
+      "skipped": true
+    }
+
+    // WHEN
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.context.currentItem.test_status = "FAIL";
+    pullRequestDecoratorReporter.assertion(null, args);
+
+    // THEN
+    expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("FAIL");
+    expect(pullRequestDecoratorReporter.context.assertions.failed_count).to.equal(1);
+    expect(pullRequestDecoratorReporter.context.assertions.skipped_count).to.equal(0);
 
   });
 
@@ -611,12 +679,12 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
 
   });
 
-  it("Given repository name missing when instantiating PullRequestDecoratorReporter then throw an exception", function () {
+  it("Given repository name missing when instantiating PullRequestDecoratorReporter then throw an error", function () {
     // GIVEN missing repository name THEN WHEN
     expect(() => new PullRequestDecoratorReporter(newmanEmitter, {}, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Repository name is missing ! Add --reporter-pullrequest-decorator-repo <repo>.');
   });
 
-  it("Given ref commit missing when instantiating PullRequestDecoratorReporter then throw an exception", function () {
+  it("Given ref commit missing when instantiating PullRequestDecoratorReporter then throw an error", function () {
     // GIVEN missing refcommit
     const reporterOptions = {
       pullrequestDecoratorRepo: "org/repo"
@@ -626,7 +694,7 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
     expect(() => new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Ref commit is missing ! Add --reporter-pullrequest-decorator-refcommit <refcommit>.');
   });
 
-  it("Given token missing when instantiating PullRequestDecoratorReporter then throw an exception", function () {
+  it("Given token missing when instantiating PullRequestDecoratorReporter then throw an error", function () {
     // GIVEN missing token
     const reporterOptions = {
       pullrequestDecoratorRepo: "org/repo",
