@@ -464,6 +464,20 @@ describe("PullRequestDecoratorReporter in report mode", function () {
     ]);
 
   });
+
+  it("Given export mode check when calling *done* event method then github check is not created", function () {
+
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    sinon.spy(pullRequestDecoratorReporter.githubService, 'createPullRequestCheck');
+
+    // WHEN
+    pullRequestDecoratorReporter.done();
+
+    // THEN
+    expect(pullRequestDecoratorReporter.githubService.createPullRequestCheck).to.not.have.been.called;
+
+  });
+
 });
 
 describe("PullRequestDecoratorReporter in non report mode (github mode)", function () {
@@ -475,7 +489,8 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
   }
 
   let newmanEmitter = {
-    on: sinon.spy()
+    on: sinon.spy(),
+    exports: sinon.spy()
   };
 
   it("Given valid reporter options when instantiating PullRequestDecoratorReporter then it's options are correctly initialized", function () {
@@ -493,6 +508,24 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
     assert.equal(pullRequestDecoratorReporter.options.repo, 'org/repo');
     assert.equal(pullRequestDecoratorReporter.options.refCommit, '12525141526950');
     assert.equal(pullRequestDecoratorReporter.options.token, 'gUoowOFHOSFjn142414');
+
+  });
+
+  it("Given non export mode when calling *beforeDone* event method then export is not done", function () {
+
+    // GIVEN any valid reporterOptions
+    const reporterOptions = {
+      pullrequestDecoratorRepo: "anyRepo",
+      pullrequestDecoratorRefcommit: "anyCommit",
+      pullrequestDecoratorToken: "anyToken"
+    }
+
+    // WHEN
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.beforeDone();
+
+    // THEN
+    expect(newmanEmitter.exports).to.not.have.been.called;
 
   });
 
@@ -601,9 +634,10 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
     ]
 
     // WHEN
-    pullRequestDecoratorReporter.done(null, args);
+    const result = pullRequestDecoratorReporter.done(null, args);
 
     // THEN
+    expect(result instanceof Promise).to.be.true;
     expect(pullRequestDecoratorReporter.githubService.createPullRequestCheck).to.have.been.calledWith(
       {
         assertions: { failed_count: 0 },
@@ -676,6 +710,35 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
         debug: undefined
       });
 
+
+  });
+
+  it("Given an error is thrown while creating pullrequest check when calling *done* event method then return a Promise", function () {
+
+    // GIVEN any valid reporterOptions
+    const reporterOptions = {
+      pullrequestDecoratorRepo: "anyRepo",
+      pullrequestDecoratorRefcommit: "anyCommit",
+      pullrequestDecoratorToken: "anyToken"
+    }
+
+    // AND any non empty args object
+    const args = {
+      collection: {}
+    }
+
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    // AND any report generated
+    sinon.stub(pullRequestDecoratorReporter, 'buildReport').callsFake(() => []);
+    // AND githubService failing when creating pullrequest check
+    sinon.stub(pullRequestDecoratorReporter.githubService, 'createPullRequestCheck').callsFake(() => Promise.reject(new Error('fail')));
+
+
+    // WHEN
+    const result = pullRequestDecoratorReporter.done(null, args);
+
+    // THEN
+    expect(result instanceof Promise).to.be.true;
 
   });
 
