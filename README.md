@@ -78,6 +78,7 @@ newman run <collection-url> --environment=<env-url> -r @decathlon/pullrequest-de
 `--reporter-pullrequest-decorator-refcommit` | (Required) Long Commit hash. When you run this reporter from a Pull Request. You should use : ${{ github.event.pull_request.head.sha }}
 `--reporter-debug` | (Optional : Default `false`) Reporter debug mode
 `--suppress-exit-code` | (Optional) Ensure that asynchronous github API is called before reporter termination.
+`--reporter-showOnlyFails` | (Optional) Only report fails.
 
 ---
 

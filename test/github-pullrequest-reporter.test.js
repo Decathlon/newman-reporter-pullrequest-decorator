@@ -135,7 +135,6 @@ describe("PullRequestDecoratorReporter in report mode", function () {
     expect(pullRequestDecoratorReporter.context.currentItem.body).to.not.be.null;
     expect(pullRequestDecoratorReporter.context.currentItem.code).to.equal(200);
     expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("PASS");
-    expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(1);
 
   });
 
@@ -174,15 +173,12 @@ describe("PullRequestDecoratorReporter in report mode", function () {
     // THEN
     expect(pullRequestDecoratorReporter.context.currentItem.body).to.equal("TECHNICAL_ERROR");
     expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("FAIL");
-    expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(1);
 
   });
 
   it("Given a neither valid error or successful request when calling *request* event method then throw an error", function () {
 
     // GIVEN a invalid request : it does not contain a response
-
-
     const args = {
       "request": {
         "url": {
@@ -244,6 +240,7 @@ describe("PullRequestDecoratorReporter in report mode", function () {
     expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("FAIL");
     expect(pullRequestDecoratorReporter.context.currentItem.failed[0]).to.equal('Status code is 200 , AssertionError , expected response to have status code 200 but got 404');
     expect(pullRequestDecoratorReporter.context.assertions.failed_count).to.equal(1);
+    expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(1);
 
   });
 
@@ -264,6 +261,23 @@ describe("PullRequestDecoratorReporter in report mode", function () {
     expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("SKIP");
     expect(pullRequestDecoratorReporter.context.currentItem.skipped[0]).to.equal('Status code is 200');
     expect(pullRequestDecoratorReporter.context.assertions.skipped_count).to.equal(1);
+    expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(1);
+
+  });
+
+  it("Given a successfull assertion *assertion* event method then context is correctly filled with request information", function () {
+
+    // GIVEN
+
+    const args = {
+      "skipped": false,
+      "assertion": "Status code is 200"
+    }
+
+    // WHEN
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.assertion(null, args);
+    expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(1);
 
   });
 
@@ -706,6 +720,7 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
         checkName: undefined,
         token: 'gUoowOFHOSFjn142414',
         export: undefined,
+        showOnlyFails: undefined,
         collectionName: 'ANY_COLLECTION',
         debug: undefined
       });
@@ -766,6 +781,60 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
 
     // THEN WHEN
     expect(() => new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions)).to.throw(Error, '[-] ERROR: Github PullRequest Token is missing ! Add --reporter-pullrequest-decorator-token <token>.');
+  });
+
+});
+
+describe("GithubPullRequestReporter in showOnlyFailsMode", function () {
+
+  const reporterOptions = { export: 'anyPath', showOnlyFails: true }
+  const newmanOptions = {
+    collection: {
+      name: "ANY_COLLECTION"
+    }
+  }
+
+  let newmanEmitter = {
+    on: sinon.spy()
+  };
+
+  it("Given a successfull assertion *assertion* event method then context is correctly filled with request information", function () {
+
+    // GIVEN
+
+    const args = {
+      "skipped": false,
+      "assertion": "Status code is 200"
+    }
+
+    // WHEN
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.assertion(null, args);
+    expect(pullRequestDecoratorReporter.context.list).to.have.lengthOf(0);
+
+
+  });
+
+  it("Given an assertion in error when calling *assertion* event method then context is correctly filled with request information", function () {
+
+    // GIVEN
+
+    const error = {
+      "test": "Status code is 200",
+      "name": "AssertionError",
+      "message": "expected response to have status code 200 but got 404"
+    }
+
+    // WHEN
+    const pullRequestDecoratorReporter = new PullRequestDecoratorReporter(newmanEmitter, reporterOptions, newmanOptions);
+    pullRequestDecoratorReporter.assertion(error);
+
+    // THEN
+
+    expect(pullRequestDecoratorReporter.context.currentItem.test_status).to.equal("FAIL");
+    expect(pullRequestDecoratorReporter.context.currentItem.failed[0]).to.equal('Status code is 200 , AssertionError , expected response to have status code 200 but got 404');
+    expect(pullRequestDecoratorReporter.context.assertions.failed_count).to.equal(1);
+
   });
 
 });

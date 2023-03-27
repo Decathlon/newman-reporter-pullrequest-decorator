@@ -201,4 +201,15 @@ describe("Markdown generation", function () {
 		]))
 			.to.throw(Error, 'Collection should contain at any level either only folders or requests.');
 	});
+
+	it("Given an empty folder level postman collection when calling buildMarkdownText then generate markdown", function () {
+		const collectionName = "SC001 - As a Customer, i want to merge an anonymous cart from another anonymous cart";
+		const report = {
+			"name": collectionName,
+			"subItems": []
+		}
+		expect(path.join(expectationsDir, 'empty-folder-markdown.md')).to.be.a.file().with.content(buildMarkdownText([report
+		]
+		));
+	});
 });
