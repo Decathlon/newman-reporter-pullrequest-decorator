@@ -7,6 +7,7 @@ chai = require('chai'),
 chai.use(require('chai-fs'));
 
 describe("Markdown generation", function () {
+	
 	it("Given a flat collections when calling buildMarkdownText then generate markdown", function () {
 		expect(path.join(expectationsDir, 'flat-markdown.md')).to.be.a.file().with.content(buildMarkdownText([{
 			request_name: 'Get all ice hockey sport places within 99km around McGill University in Montréal, Canada',
