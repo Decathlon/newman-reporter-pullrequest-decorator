@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+
+  pull_request:
+    branches:
+      - main
+      
 jobs:
     build:
       name: Build and Test
@@ -33,7 +38,7 @@ jobs:
       name: NPM publish
       timeout-minutes: 10
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       needs: [build]
       steps:
         # Retrieves repo content
