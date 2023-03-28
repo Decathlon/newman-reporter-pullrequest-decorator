@@ -265,7 +265,7 @@ describe("PullRequestDecoratorReporter in report mode", function () {
 
   });
 
-  it("Given a successfull assertion *assertion* event method then context is correctly filled with request information", function () {
+  it("Given a successfull assertion *assertion* event method then context current item is added to context report list", function () {
 
     // GIVEN
 
@@ -798,7 +798,7 @@ describe("GithubPullRequestReporter in showOnlyFailsMode", function () {
     on: sinon.spy()
   };
 
-  it("Given a successfull assertion *assertion* event method then context is correctly filled with request information", function () {
+  it("Given a successfull assertion *assertion* event method then context current item is ignored", function () {
 
     // GIVEN
 
@@ -815,7 +815,7 @@ describe("GithubPullRequestReporter in showOnlyFailsMode", function () {
 
   });
 
-  it("Given an assertion in error when calling *assertion* event method then context is correctly filled with request information", function () {
+  it("Given an assertion in error when calling *assertion* event method then context current item is added to the context report list", function () {
 
     // GIVEN
 
