@@ -1,7 +1,7 @@
 {
   "name": "@decathlon/newman-reporter-pullrequest-decorator",
   "license": "Apache-2.0",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Newman reporter allowing to decorate Github's PullRequest with postman collection results",
   "main": "index.js",
   "scripts": {
