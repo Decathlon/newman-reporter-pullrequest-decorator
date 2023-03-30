@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.21 (2023-03-30)
+
+
+### Features
+
+* Adding --showOnlyFails feature ([893f10b](https://github.com/Decathlon/newman-reporter-pullrequest-decorator/commit/893f10bccab7f0aa8f4c5fb48535fcf80b89e944))
+
 ### 0.0.20 (2023-03-28)
 
 ### 0.0.19 (2023-03-28)
