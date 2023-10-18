@@ -1,18 +1,12 @@
-// What to test?
-
-const PullRequestDecoratorReporter = require("../lib/pullrequest-decorator-reporter");
+const { Octokit } = require("@octokit/rest");
+const GithubService = require("../lib/github-service");
 const { buildPullRequestComment } = require("../lib/utils");
 
-// Utils - buildPullRequestComment
-// pullrequest-decorator-reporter -  this.githubService.createPullRequestComment
-// github-service - getAssociatedPullRequestNumberFromSha
-// github-service - createPullRequestComment
-
-const GithubService = require("../lib/github-service.js"),
-    chai = require("chai"),
-    sinon = require("sinon"),
-    {expect} = chai,
-    sinonChai = require("sinon-chai");
+const chai = require("chai"),
+      sinon = require("sinon"),
+      {expect} = chai,
+      {stub} = sinon,
+      sinonChai = require("sinon-chai");
 
 chai.use(sinonChai);
 
@@ -71,3 +65,40 @@ describe("Utils : buildPullRequestComment", () => {
         expect(result).to.equal(expectedResult);
     })
 })
+
+// TODO 
+describe("github-service : getAssociatedPullRequestNumberFromSha", () => {
+    it("Given a commit sha with no associated pull requests it returns null", async () => {
+
+        let githubService = new GithubService({ 
+            token: "anyToken",
+            repo: "organization/repo",
+            checkName: "non-regression-test",
+            refCommit: "commitRef",
+        });
+
+        let expectedResponse = [];
+        stub(githubService, "getOctokitInstance").resolves(new Octokit());
+        stub(githubService.getOctokitInstance(), "request").resolves([])
+        
+        const res = await githubService.getAssociatedPullRequestNumberFromSha();
+        console.log(res);
+        expect(res).to.be.null;
+    })
+
+    it("Given a commit sha with an associated pull request, it returns the pull request number", () => {
+        expect(false).to.equal(false);
+    })
+})
+
+// TODO
+describe("pullrequest-decorator-reporter : createPullRequestComment", () => {
+    it("Given a commit sha with no associated pull request, it returns null", () => {
+        expect(1).to.equal(1);
+    })
+
+    it("Given a commit sha with an associated pull request, it creates a github comment", () => {
+        expect(1).to.equal(1);
+    })
+})
+
