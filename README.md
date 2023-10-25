@@ -79,6 +79,7 @@ newman run <collection-url> --environment=<env-url> -r @decathlon/pullrequest-de
 `--reporter-debug` | (Optional : Default `false`) Reporter debug mode
 `--suppress-exit-code` | (Optional) Ensure that asynchronous github API is called before reporter termination.
 `--showOnlyFails` | (Optional : Default `false`) Show only failing assertions.
+`--reporter-pullrequest-decorator-enablecomment` | (Optional) Boolean. Allows you to get a comment in your pull request containing the summary of the test result.
 
 ---
 

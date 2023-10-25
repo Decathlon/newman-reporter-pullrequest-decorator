@@ -722,7 +722,8 @@ describe("PullRequestDecoratorReporter in non report mode (github mode)", functi
         export: undefined,
         showOnlyFails: undefined,
         collectionName: 'ANY_COLLECTION',
-        debug: undefined
+        debug: undefined,
+        enablePullRequestComment: undefined
       });
 
 
