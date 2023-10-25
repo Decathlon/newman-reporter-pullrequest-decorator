@@ -217,7 +217,7 @@ describe("Markdown generation", function () {
 
 describe("Utils : buildPullRequestComment", () => {
     it("Given a collection with no tests, return the correct comment", () => {
-        const expectedResult = `**Summary**:  \n  ❌ 0 **Tests Failed**\n  ⏩ 0 **Tests Skipped**\n  ✅ 0 / 0 **Reqests Passed**`;
+        const expectedResult = `Congratulations, All Tests have Passed! \n\n  Please find the complete report here: undefined \n  ✅ 0 / 0 **Requests Passed** \n  ❌ 0 / 0 **Requests Failed**\n  ⏩ 0 / 0 **Requests Skipped**`;
 
         const assertions = {
             failed_count: 0,
@@ -232,7 +232,7 @@ describe("Utils : buildPullRequestComment", () => {
     })
 
     it("Given a collection with a passing and failing test return the correct comment", () => {
-        const expectedResult = `**Summary**:  \n  ❌ 1 **Tests Failed**\n  ⏩ 0 **Tests Skipped**\n  ✅ 1 / 2 **Reqests Passed** \n **The following tests are failing** \n\n [+] Show one place\n  -  Status code is 200 , AssertionError , expected response to have status code 200 but got 404 \n`
+        const expectedResult = 'Here is a summary of your collection:\n  Please find the complete report here: undefined \n  ✅ 1 / 2 **Requests Passed** \n  ❌ 1 / 2 **Requests Failed**\n  ⏩ 0 / 2 **Requests Skipped** \n **The following tests are failing:** \n\n [+] Show one place\n  -  Status code is 200 , AssertionError , expected response to have status code 200 but got 404 \n'
 
         const assertions = {
             failed_count: 1,

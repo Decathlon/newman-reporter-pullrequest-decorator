@@ -51,6 +51,7 @@
     }
   ],
   "dependencies": {
+    "@decathlon/newman-reporter-pullrequest-decorator": "^0.0.22",
     "@octokit/rest": "^18.5.2"
   },
   "devDependencies": {
