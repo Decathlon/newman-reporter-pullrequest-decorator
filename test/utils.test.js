@@ -1,5 +1,6 @@
 const { buildMarkdownText } = require("../lib/utils.js")
 const {buildPullRequestComment} = require("../lib/utils.js")
+const GithubService = require('../lib/github-service.js')
 chai = require('chai'),
 	{ assert, expect } = chai,
 	path = require('path'),
@@ -216,23 +217,33 @@ describe("Markdown generation", function () {
 });
 
 describe("Utils : buildPullRequestComment", () => {
+
+	let githubService = new GithubService({
+		token: "anyToken",
+		repo: "organization/repo",
+		checkName: "non-regression-test-1",
+		refCommit: "2d58379528f086352820a3f534396728dad4353f",
+
+	});
+
     it("Given a collection with no tests, return the correct comment", () => {
-        const expectedResult = `Congratulations, All Tests have Passed! \n\n  Please find the complete report here: undefined \n  ✅ 0 / 0 **Requests Passed** \n  ❌ 0 / 0 **Requests Failed**\n  ⏩ 0 / 0 **Requests Skipped**`;
+        const expectedResult = `Congratulations, All Tests have Passed! \nPlease find the complete report [here](https://github.com/organization/repo/pull/3/checks?check_run_id=1121312312)  \n  ✅ 0 / 0 **Requests Passed** \n  ❌ 0 / 0 **Requests Failed**\n  ⏩ 0 / 0 **Requests Skipped**`;
 
         const assertions = {
             failed_count: 0,
             skipped_count: 0,
         };
         const items = [];
-        const report = {assertions, items}
-
-        const result = buildPullRequestComment(report);
+		const report = {assertions, items}
+		const issueNumber = 3;
+		const checkRunId = "1121312312";
+        const result = buildPullRequestComment(report, githubService.options, issueNumber, checkRunId);
 
         expect(result).to.equal(expectedResult);
     })
 
     it("Given a collection with a passing and failing test return the correct comment", () => {
-        const expectedResult = 'Here is a summary of your collection:\n  Please find the complete report here: undefined \n  ✅ 1 / 2 **Requests Passed** \n  ❌ 1 / 2 **Requests Failed**\n  ⏩ 0 / 2 **Requests Skipped** \n **The following tests are failing:** \n\n [+] Show one place\n  -  Status code is 200 , AssertionError , expected response to have status code 200 but got 404 \n'
+        const expectedResult = 'You have some failing tests \n Please find the complete report [here](https://github.com/organization/repo/pull/3/checks?check_run_id=1121312312)  \n  ✅ 1 / 2 **Requests Passed** \n  ❌ 1 / 2 **Requests Failed**\n  ⏩ 0 / 2 **Requests Skipped** \n **The following tests are failing:** \n\n [+] Show one place\n  -  Status code is 200 , AssertionError , expected response to have status code 200 but got 404 \n'
 
         const assertions = {
             failed_count: 1,
@@ -261,8 +272,11 @@ describe("Utils : buildPullRequestComment", () => {
 			skipped: []
 		}
         ];
+
         const report = {assertions, items}
-        const result = buildPullRequestComment(report);
+		const issueNumber = 3;
+		const checkRunId = "1121312312";
+        const result = buildPullRequestComment(report, githubService.options, issueNumber, checkRunId);
 
         expect(result).to.equal(expectedResult);
     })
