@@ -250,7 +250,7 @@ describe("Utils : buildPullRequestComment", () => {
             skipped_count: 0,
         };
         const items = [
-{
+		{
 			request_name: 'Get all ice hockey sport places within 99km around McGill University in Montréal, Canada',
 			url: 'https://sportplaces.api.decathlon.com/api/v1/places?origin=-73.582,45.511&radius=99&sports=175',
 			method: 'GET',
@@ -280,4 +280,33 @@ describe("Utils : buildPullRequestComment", () => {
 
         expect(result).to.equal(expectedResult);
     })
+
+	it("Given a github service, issue number and checkRunId it should return the correct url", () => {
+		const expectedUrl = "https://github.com/organization/repo/pull/3/checks?check_run_id=1121312312";
+
+        const assertions = {
+            failed_count: 1,
+            skipped_count: 0,
+        };
+        const items = [
+		{
+			request_name: 'Get all ice hockey sport places within 99km around McGill University in Montréal, Canada',
+			url: 'https://sportplaces.api.decathlon.com/api/v1/places?origin=-73.582,45.511&radius=99&sports=175',
+			method: 'GET',
+			status: 'OK',
+			code: 200,
+			test_status: 'PASS',
+			failed: [],
+			skipped: []
+		}];
+
+        const report = {assertions, items}
+		const issueNumber = 3;
+		const checkRunId = "1121312312";
+
+		const output = buildPullRequestComment(report, githubService.options, issueNumber, checkRunId).substring(80, 154)
+		expect(expectedUrl).to.equal(output);
+
+	})
+
 })
