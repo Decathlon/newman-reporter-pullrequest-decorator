@@ -342,8 +342,93 @@ describe("Utils : buildPullRequestComment", () => {
         ];
 
         const report = {assertions, items}
-		    const issueNumber = 3;
-		    const checkRunId = "1121312312";
+		const issueNumber = 3;
+		const checkRunId = "1121312312";
+        const result = buildPullRequestComment(report, githubService.options, issueNumber, checkRunId);
+
+
+        expect(result).to.equal(expectedResult);
+    })
+
+	it("Given a collection with depth = 2 that has a passing and failing test return the correct comment", () => {
+        const expectedResult = 'You have some failing tests \n Please find the complete report [here](https://github.com/organization/repo/pull/3/checks?check_run_id=1121312312)  \n  ✅ 2 / 4 **Requests Passed** \n  ❌ 2 / 4 **Requests Failed**\n  ⏩ 0 / 4 **Requests Skipped** \n **The following tests are failing:** \n\n [+] Show one place\n  -  Status code is 200 , AssertionError , expected response to have status code 200 but got 404 \n\n [+] Show one place\n  -  Status code is 200 , AssertionError , expected response to have status code 200 but got 404 \n'
+        const assertions = {
+            failed_count: 2,
+            skipped_count: 0,
+        };
+        const items = [
+			{
+				name: "depthOneFolderOne",
+				subItems: [
+					{
+						name: "depthOneFolderOne-A",
+						subItems: [
+							{
+							request_name: 'Get all ice hockey sport places within 99km around McGill University in Montréal, Canada',
+							url: 'https://sportplaces.api.decathlon.com/api/v1/places?origin=-73.582,45.511&radius=99&sports=175',
+							method: 'GET',
+							status: 'OK',
+							code: 200,
+							test_status: 'PASS',
+							failed: [],
+							skipped: []
+						  }
+						]
+					},
+					{
+						name: "depthOneFolderOne-B",
+						subItems: [
+						  {
+							request_name: 'Show one place',
+							url: 'https://sportplaces.api.decathlon.com/api/v1/places/8b1e3027-e438-42c2-92ab-5ebd23f68d54',
+							method: 'GET',
+							status: 'Not Found',
+							body: `{ "error": "Not found" }`,
+							code: 404,
+							test_status: 'FAIL',
+							failed: ["Status code is 200 , AssertionError , expected response to have status code 200 but got 404"],
+							skipped: []
+						  }]
+					}]
+			},
+			{
+				name: "depthOneFolderTwo",
+				subItems: [
+					{
+						name: "depthOneFolderTwo-A",
+						subItems: [
+						  {
+							request_name: 'Show one place',
+							url: 'https://sportplaces.api.decathlon.com/api/v1/places/8b1e3027-e438-42c2-92ab-5ebd23f68d54',
+							method: 'GET',
+							status: 'Not Found',
+							body: `{ "error": "Not found" }`,
+							code: 404,
+							test_status: 'FAIL',
+							failed: ["Status code is 200 , AssertionError , expected response to have status code 200 but got 404"],
+							skipped: []
+						  }]
+					},
+					{
+						name: "depthOneFolderTwo-B",
+						subItems: [
+							{
+							request_name: 'Get all ice hockey sport places within 99km around McGill University in Montréal, Canada',
+							url: 'https://sportplaces.api.decathlon.com/api/v1/places?origin=-73.582,45.511&radius=99&sports=175',
+							method: 'GET',
+							status: 'OK',
+							code: 200,
+							test_status: 'PASS',
+							failed: [],
+							skipped: []
+						  }]
+					}]
+			}
+        ];
+
+        const report = {assertions, items}
+		const issueNumber = 3;
+		const checkRunId = "1121312312";
         const result = buildPullRequestComment(report, githubService.options, issueNumber, checkRunId);
 
 
