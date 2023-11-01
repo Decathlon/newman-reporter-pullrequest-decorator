@@ -233,11 +233,13 @@ describe("Utils : buildPullRequestComment", () => {
             failed_count: 0,
             skipped_count: 0,
         };
+
         const items = [{}];
 		    const report = {assertions, items}
 		    const issueNumber = 3;
 		    const checkRunId = "1121312312";
         const result = buildPullRequestComment(report, githubService.options, issueNumber, checkRunId);
+
 
         expect(result).to.equal(expectedResult);
     })
@@ -340,14 +342,13 @@ describe("Utils : buildPullRequestComment", () => {
         ];
 
         const report = {assertions, items}
-		const issueNumber = 3;
-		const checkRunId = "1121312312";
+		    const issueNumber = 3;
+		    const checkRunId = "1121312312";
         const result = buildPullRequestComment(report, githubService.options, issueNumber, checkRunId);
+
 
         expect(result).to.equal(expectedResult);
     })
-
-
 
 	it("Given a github service, issue number and checkRunId it should return the correct url from buildCheckPageUrl", () => {
 		const expectedUrl = "https://github.com/organization/repo/pull/3/checks?check_run_id=1121312312";
