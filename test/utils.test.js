@@ -280,7 +280,7 @@ describe("Utils : buildPullRequestComment", () => {
         expect(result).to.equal(expectedResult);
     })
 
-	it("Given a github service, issue number and checkRunId it should return the correct url", () => {
+	it("Given a github service, issue number and checkRunId it should return the correct url from buildCheckPageUrl", () => {
 		const expectedUrl = "https://github.com/organization/repo/pull/3/checks?check_run_id=1121312312";
 
         const assertions = {
