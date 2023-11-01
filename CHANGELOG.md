@@ -2,9 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### Bug Fixes
-
-* Improving pull request comment (content + link) and avoid raising an error when there is no pull request matching the provided commit. ([b28f6f9](https://github.com/Decathlon/newman-reporter-pullrequest-decorator/commit/b28f6f9394495427eadaebc47790061701e476d9))
+### 0.0.24 (2023-11-01)
 
 ### 0.0.23 (2023-11-01)
 
